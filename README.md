@@ -2,6 +2,9 @@
 
 A simple app to practice React.
 
+Resources:
+
+_Subramanian, Vasan_. Pro Mern Stack: Full Stack Web App Development with Mongo, Express, React, and Node. , 2019. Internet resource.
 
 ## Install packages
 ```
