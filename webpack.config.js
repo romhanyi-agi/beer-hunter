@@ -4,7 +4,7 @@ module.exports = {
   mode: 'development',
   // When using HMR the entry point has to be an array,
   // so a new entry point can be pushed when needed.
-  entry: { app: ['./src/App.jsx'] },
+  entry: { app: ['./src/index.jsx'] },
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'public'),

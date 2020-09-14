@@ -1,13 +1,20 @@
-import 'babel-polyfill';
-import 'whatwg-fetch';
-import React from 'react';
-import ReactDOM from 'react-dom';
+/* eslint-disable import/prefer-default-export */
+import React, { Fragment } from 'react';
+import { useAuth } from './Authentication/AuthContext.jsx';
+import { Header } from './Component/Header.jsx';
+import { Login } from './Component/Login.jsx';
+import { Home } from './Component/Home.jsx';
 
-ReactDOM.render(
-  <h1>Welcome, Beer lover!</h1>,
-  document.getElementById('main'),
-);
+export const App = () => {
+  const { isAuthenticated } = useAuth();
 
-if (module.hot) {
-  module.hot.accept();
-}
+  return (
+    <Fragment>
+      <Header />
+      { isAuthenticated
+        ? <Home />
+        : <Login />
+      }
+    </Fragment>
+  );
+};
