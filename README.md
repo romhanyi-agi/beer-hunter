@@ -9,8 +9,8 @@ This is a simple app to practice React.
 - [Basic Login](/wiki/login.md)
     It is makeshift authentication consisting of an authentication context, a login, and a home component.
     Instead of the usual token-based authentication, it simply sends a request to _https://yesno.wtf_ API to decide if the user is allowed to log in or not.
-- [Data Fetch]()
-    I implement a custom hook that handles api calls for the app. Home page shows beers from Punk API, https://api.punkapi.com/v2/
+- [Data Fetch](/wiki/APICalls.md)
+    I implement a custom hook that handles api calls for the app. The Home component shows beers from Punk API, https://api.punkapi.com/v2/
 
 ## Resources:
 
@@ -29,3 +29,5 @@ This is a simple app to practice React.
 ## Data Fetch
 
 - _MDN web docs, Using Fetch_, https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+
+- _How to fetch data with React Hooks_,BY ROBIN WIERUCH https://www.robinwieruch.de/react-hooks-fetch-data
