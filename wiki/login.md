@@ -1,9 +1,9 @@
 # Authentication and login
 
-It is basic authentication consisting of an authentication context, a login, and a home component.
-Instead of the usual token-based authentication, it simply sends a request to _https://yesno.wtf_ API to decide if the user is allowed to log in or not.
+It is substitute authentication consisting of an authentication context, a login, and a home component.
+Instead of the usual password and token-based authentication, it simply sends a request to _https://yesno.wtf_ API to decide if the user is allowed to log in or not. The user stays logged in until clicking the logout button.
 
-## Authentication context
+## Authentication context - AuthContext.jsx
 
 According to the React documentation:
 > Context provides a way to share values [...] between components without having to explicitly pass a prop through every level of the tree. [...] Context is designed to share data that can be considered “global” for a tree of React components, such as the current authenticated user, theme, or preferred language.
@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
 };
 ```
 
-Instead of `useState`, I chose `useReducer` to handle state for this component. Reducers are great for managing complex states with multiple sublevels, so for this basic example,`useState` would have been perfectly fine, but I just wanted to see how it works with a reducer. 
+Instead of `useState`, I chose `useReducer` to handle state for this component. Reducers are great for managing complex states with multiple sublevels, so for this basic example,`useState` would have been perfectly fine, but I just wanted to see how it works with a reducer, and in a real-life scenario this state would probably more complex. 
 The React `useReducer` hook takes the current state and an action as its arguments and returns a new state and a dispatch method. Reducers are pure functions without side-effects. Therefore, the same input (current state and action) shall always produce the same output (new state).
 
 
@@ -51,7 +51,7 @@ In the children components we can now access to these states and methods by call
 const { logout } = useAuth();
 ```
 
-## Login page
+## Login component - Login.jsx
 
 The login component has an `error` and an `isLoading` state, and it returns a simple login form, with an input field for the user name and a submit button.
 

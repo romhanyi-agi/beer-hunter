@@ -17,7 +17,12 @@ export const Login = () => {
         Accept: 'application/json',
       },
     })
-      .then(response => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Something went wrong. Possible problemse: network error, permission issues, or resource not found.');
+        }
+        return response.json();
+      })
       .then((respData) => {
         setIsLoading(false);
         if (respData.answer === 'yes' || respData.answer === 'maybe') {
@@ -28,8 +33,8 @@ export const Login = () => {
         }
       })
       .catch((err) => {
-        // console.error('ERROR: ', err);
-        setError(err);
+        // console.error('ERROR: ', err.message);
+        setError(err.message);
       });
   };
 
