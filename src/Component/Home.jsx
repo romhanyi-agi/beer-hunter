@@ -6,7 +6,6 @@ import useApi from '../APICall/useAPI.js';
 
 // eslint-disable-next-line import/prefer-default-export
 export const Home = () => {
-  const { logout } = useAuth();
 
   const PUNK_API = 'https://api.punkapi.com/v2/beers?page=1&per_page=2';
   const { data, isLoading, isError, error } = useApi(PUNK_API, { method: 'GET' });
@@ -17,9 +16,6 @@ export const Home = () => {
   return (
     <div>
       <h1>Welcome and happy beer-hunting!</h1>
-      <p> You are logged in.</p>
-      <button type="button" onClick={logout}>Log out</button>
-      <p> First API call</p>
       {isLoading
         ? 'LOADING ...'
         : isError

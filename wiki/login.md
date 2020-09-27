@@ -1,26 +1,28 @@
-# Authentication and login
+# Authentication, login, and logout
 
 It is substitute authentication consisting of an authentication context, a login, and a home component.
 Instead of the usual password and token-based authentication, it simply sends a request to _https://yesno.wtf_ API to decide if the user is allowed to log in or not. The user stays logged in until clicking the logout button.
+
+In this basic example, I do not use routing. If `isAuthenticated` is true, the `<App />` component renders `<Home />` otherwise it renders `<Login />`.
 
 ## Authentication context - AuthContext.jsx
 
 According to the React documentation:
 > Context provides a way to share values [...] between components without having to explicitly pass a prop through every level of the tree. [...] Context is designed to share data that can be considered “global” for a tree of React components, such as the current authenticated user, theme, or preferred language.
 
-Therefore, authentication is a fitting example of when to use contexts. We probably want to know if the user could log in, what user name or email they have set, and we would also like to access methods, e.g., log in or logout in various components.
+Therefore, authentication is a fitting example of when to use contexts. We probably want to know if the user is logged in, what are the user name or email they have set, and we would also like to access methods, e.g., log in or logout in various components.
 
-First, we create a context called `AuthContext` and a hook `useAuth()` to utilize it.
+Therefore, I've created a context called `AuthContext` and a hook `useAuth()` to utilize it.
 
 ``` js
 export const AuthContext = React.createContext();
 export const useAuth = () => useContext(AuthContext);
 ```
-We also need a Provider component that lets the consuming components - descendants of the Provider - to subscribe to context changes. The `AuthProvider` passes down the `login`, `logout`, and `setUser` methods, as well as the `isAuthenticated` and `user` states to the consuming components in its value prop.
+We also need a Provider component that lets the consuming components - descendants of the Provider - to subscribe to context changes. The `AuthProvider` passes down the `login`, `logout`,  `setError`, and `setUser` methods, as well as the `isLoading`, `isError`, `isAuthenticated`, `user`, and `error` values to the consuming components in its value prop.
 
 ``` js
 export const AuthProvider = ({ children }) => {
- const [{ isAuthenticated, user }, dispatch] = useReducer(authReducer, initialState);
+  const [{ isLoading, isAuthenticated, isError, error, user }, dispatch] = useReducer(authReducer, initialState);
 
  function login() {
  ...
@@ -31,13 +33,17 @@ export const AuthProvider = ({ children }) => {
  }
 
  function setUser(newUser) {
- ..
+ ...
+ }
+
+ function setError(errorMsg) {
+ ...
  }
 
  return (
- <AuthContext.Provider value={{ setUser, login, logout, isAuthenticated, user }}>
- {children}
- </AuthContext.Provider>
+  <AuthContext.Provider value={{ setUser, setError, login, logout, isLoading, isAuthenticated, isError, error, user }}>
+    {children}
+  </AuthContext.Provider>
  );
 };
 ```
@@ -49,38 +55,48 @@ The React `useReducer` hook takes the current state and an action as its argumen
 In the children components we can now access to these states and methods by calling the `useAuth` hook. E.g.:
 ``` js 
 const { logout } = useAuth();
+  ...
+logout();
 ```
 
 ## Login component - Login.jsx
 
-The login component has an `error` and an `isLoading` state, and it returns a simple login form, with an input field for the user name and a submit button.
+The login component has a simple login form, with an input field for the user name and a submit button.
 
-Via the `useAuth` hook, we access the `user` state and the `login` and `setUser` methods of the authentication context.
+Via the `useAuth` hook, we access the `setUser`, `setError`, `login`, methods and the `isLoading`, `user`, and `error` values of the authentication context:
 
 ``` js
-const { setUser, login, user } = useAuth();
+  const { setUser, setError, login, isLoading, user, error } = useAuth();
 ```
-The login component implements the `handleChange`, `handleSubmit`, and `loginWithYesNoAPI` functions.
- `handleChange` updates the user state based on the user name input value:
+
+The login component implements the `handleChange` and `handleSubmit` functions.
+ `handleChange` calls the `setUser` method of the AuthConontext and updates the user based on the user name input value:
  ``` js
  const handleChange = (event) => {
  setUser(event.target.value);
  };
  ```
 
- While `handleSubmit` validates the user name (it is required and has to be shorter than 16 characters), and sends a request to the _https://yseno.wtf/api_ API. 
+ While `handleSubmit` validates the user name (it is required and has to be shorter than 16 characters). It calls the AuthContext's `setError` method if the user name fails the validation or the `login` method if it passes. 
+
  ``` js
  const handleSubmit = () => {
- if (!user) {
- setError('User name is required!');
- } else if (user.length > 16) {
- setError('User name cannot be longer than 16 characters.'); 
- } else {
- setError(null);
- loginWithYesNoAPI();
- }
+  if (!user) {
+    setError('User name is required!');
+  } else if (user.length > 16) {
+    setError('User name cannot be longer than 16 characters.'); 
+  } else {
+    setError(null);
+    login();
+  }
  };
  ```
-The `loginWithYesNoAPI` is an async function that fetches data from the _https://yseno.wtf/api_. If the fetch is successful, based on the response (yes or no), we update the `isAuthenticated` state, thus the user is either logged in or not.
+`login` is an async function that fetches data from the _https://yseno.wtf/api_. If the fetch is successful, based on the response (yes or no), it sets the `isAuthenticated` state (true, false), thus the user is either logged in or not.
 
-In this basic example, I do not use routing. If `isAuthenticated` is true, we render the `<Home />` component, and when it is false, we display `<Login />`.
+## Logout - Header.jsx
+
+When the user passes authentication, the username and a logout button are displayed on the `<Header />` component.
+Both the value of `user` and the `logout` method are obtained from the AuthContext.
+``` js
+const { user, isAuthenticated, logout } = useAuth(); 
+```

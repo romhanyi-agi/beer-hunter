@@ -2,6 +2,7 @@
 
 This is a simple app to practice React.
 
+
 ## Content
 
 - [Project setup](/wiki/projectSetup.md)
@@ -14,11 +15,11 @@ This is a simple app to practice React.
 
 ## Resources:
 
-## Project setup:
+### Project setup:
 
 - _Subramanian, Vasan_. Pro Mern Stack: Full Stack Web App Development with Mongo, Express, React, and Node. , 2019. Internet resource.
 
-## Login
+### Login
 
 -  _Using the fetch API_, https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
@@ -26,7 +27,7 @@ This is a simple app to practice React.
 
 - _React hooks API Reference_, https://reactjs.org/docs/hooks-reference.html
 
-## Data Fetch
+### Data Fetch
 
 - _MDN web docs, Using Fetch_, https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
 
